@@ -13,6 +13,7 @@ void SY7T609_UART::setup()
   while (this->available())
   {
     this->read();
+    delay(0);
   }
 }
 
@@ -25,6 +26,7 @@ void SY7T609_UART::loop()
     while (this->available())
     {
       this->read();
+      delay(0);
     }
     this->last_read_ = now;
 
@@ -59,6 +61,7 @@ void SY7T609_UART::loop()
         {
           float data = readPF(resp);
           this->power_factor_sensor_->publish_state(data);
+          delay(1);
         }
         //ESP_LOGD(TAG, "Got PF :[4]0x%02x [3]0x%02x [2]0x%02x!", resp[4],resp[3],resp[2]);
         this->write_state_((process_state)(m_process_state + 1));
@@ -71,6 +74,7 @@ void SY7T609_UART::loop()
         {
           float data = readVRMS(resp);
           this->voltage_sensor_->publish_state(data);
+          delay(1);
         }
         //ESP_LOGD(TAG, "Got VRMS :[4]0x%02x [3]0x%02x [2]0x%02x!", resp[4],resp[3],resp[2]);
         this->write_state_((process_state)(m_process_state + 1));
@@ -82,6 +86,7 @@ void SY7T609_UART::loop()
         {
           float data = readIRMS(resp);
           this->current_sensor_->publish_state(data);
+          delay(1);
         }
         //ESP_LOGD(TAG, "Got IRMS :[4]0x%02x [3]0x%02x [2]0x%02x!", resp[4],resp[3],resp[2]);
         this->write_state_((process_state)(m_process_state + 1));
@@ -93,6 +98,7 @@ void SY7T609_UART::loop()
         {
           float data = readPower(resp);
           this->power_sensor_->publish_state(data);
+          delay(1);
         }
         //ESP_LOGD(TAG, "Got POWER :[4]0x%02x [3]0x%02x [2]0x%02x!", resp[4],resp[3],resp[2]);
         this->write_state_((process_state)(m_process_state + 1));
@@ -105,6 +111,7 @@ void SY7T609_UART::loop()
         {
           float data = readReactivePower(resp);
           this->power_reactive_sensor_->publish_state(data);
+          delay(1);
         }
         //ESP_LOGD(TAG, "Got REACTIVE_POWER :[4]0x%02x [3]0x%02x [2]0x%02x!", resp[4],resp[3],resp[2]);
         this->write_state_((process_state)(m_process_state + 1));
@@ -117,6 +124,7 @@ void SY7T609_UART::loop()
         {
           float data = readEnergy(resp);
           this->energy_sensor_->publish_state(data);
+          delay(1);
         }
         //ESP_LOGD(TAG, "Got ENERGY :[4]0x%02x [3]0x%02x [2]0x%02x!", resp[4],resp[3],resp[2]);
         this->write_state_((process_state)(m_process_state + 1));
@@ -129,6 +137,7 @@ void SY7T609_UART::loop()
         {
           float data = readFrequency(resp);
           this->frequency_sensor_->publish_state(data);
+          delay(1);
         }
         //ESP_LOGD(TAG, "Got FREQUENCY :[4]0x%02x [3]0x%02x [2]0x%02x!", resp[4],resp[3],resp[2]);
         this->write_state_((process_state)(m_process_state + 1));
@@ -141,6 +150,7 @@ void SY7T609_UART::loop()
         {
           float data = readTemperature(resp);
           this->temperature_sensor_->publish_state(data);
+          delay(1);
         }
         //ESP_LOGD(TAG, "Got TEMPERATURE :[4]0x%02x [3]0x%02x [2]0x%02x!", resp[4],resp[3],resp[2]);
         this->write_state_(PROCESS_DONE);
@@ -151,7 +161,7 @@ void SY7T609_UART::loop()
     }
     this->last_read_ = now;
   }
-
+  delay(1);
 }
 void SY7T609_UART::update() 
 {
@@ -489,7 +499,7 @@ void SY7T609_UART::uartSendReadCmd(uint16_t addr)
 
   this->write_array(data);
   this->flush();
-  //delay(20);
+  delay(0);
 }
 
 void SY7T609_UART::uartSendWriteCmd(uint16_t addr,uint32_t value)
@@ -509,7 +519,7 @@ void SY7T609_UART::uartSendWriteCmd(uint16_t addr,uint32_t value)
   
   this->write_array(data);
   this->flush();
-  //delay(20);
+  delay(0);
 
 }
 void SY7T609_UART::write_state_(process_state state)
@@ -692,11 +702,13 @@ void SY7T609_UART::handleActionCallback()
       ESP_LOGI(TAG, "SY7T609_UART Sy7t609 handleActionCallback[%d]...",i);
       (this->*ptrFunc)();
     }
+    delay(0);
   }
 
   while(this->available())
   {
     this->read();
+    delay(0);
   }
 
   m_vecActionCallback.clear();
