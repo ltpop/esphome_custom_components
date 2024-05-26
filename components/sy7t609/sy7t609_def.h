@@ -16,7 +16,7 @@ namespace sy7t609 {
 //#define BUCKETL       (0x7780A5)   /*原厂默认的数据*/
 #define BUCKETL       (0xD5AEE6)   /*其他正常插排的数据*/
 #define IGAIN         (0x43DF0D)    /*使用万用表校准的的数据*/
-#define VGAIN         (0x208155)
+#define VGAIN         (0x20F207)
 
 #define COMMAND_REGISTER_CALIBRATION_MASK (0xFF0000)
 #define CONTROL_REGISTER_MASK             (0x001815)
